@@ -3,6 +3,7 @@
 
 **/lib/
 appsettings.json
+**/.vscode/
 
 # User-specific files
 *.suo
