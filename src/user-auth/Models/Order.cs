@@ -21,15 +21,15 @@ namespace user_auth.Models
     [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
     public DateTime DateCreated {get;set;}
 
-    
+
     [DataType(DataType.Date)]
     public DateTime? DateCompleted {get;set;}
 
-    public int UserId {get;set;}
+    public string UserId {get;set;}
     public ApplicationUser User {get;set;}
 
     public int? PaymentTypeId {get;set;}
-    public PaymentType PaymentType {get;set;} 
+    public PaymentType PaymentType {get;set;}
 
     public ICollection<LineItem> LineItems;
   }

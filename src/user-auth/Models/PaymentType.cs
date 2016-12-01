@@ -27,9 +27,9 @@ namespace user_auth.Models
     [Required]
     [StringLength(20)]
     public string AccountNumber { get; set; }
-    
+
     [Required]
-    public int UserId {get;set;}
+    public string UserId {get;set;}
     public ApplicationUser User {get;set;}
   }
 }
