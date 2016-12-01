@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
+using user_auth.Models;
 
 namespace user_auth
 {
@@ -11,6 +12,8 @@ namespace user_auth
     {
         public static void Main(string[] args)
         {
+            ApplicationUser user = new ApplicationUser();
+
             var host = new WebHostBuilder()
                 .UseKestrel()
                 .UseContentRoot(Directory.GetCurrentDirectory())
@@ -19,6 +22,7 @@ namespace user_auth
                 .Build();
 
             host.Run();
+
         }
     }
 }
