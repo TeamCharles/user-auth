@@ -81,7 +81,16 @@ namespace user_auth
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                    template: "{controller=ProductTypes}/{action=Buy}/{id?}");
+                routes.MapRoute(
+                    name: "paymentTypes",
+                    template: "{controller=PaymentTypes}/{action=Create}");
+                routes.MapRoute(
+                    name: "products",
+                    template: "{controller=Products}/{action=Index}");
+                routes.MapRoute(
+                    name: "cart",
+                    template: "{controller=Cart}/{action=Index}/{id?}");
             });
         }
     }

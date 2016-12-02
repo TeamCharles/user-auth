@@ -1,0 +1,59 @@
+@model user_auth.ViewModels.ProductDetail
+
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+<div class="center">
+    <h2 style="text-decoration: underline;">
+        @Html.DisplayFor(model => model.CurrentProduct.Name)
+    @if (@Model.CurrentProduct.UserId != UserManager.GetUserId(User))
+    {
+        <span>
+            Sold by <by></by> @Html.DisplayFor(model => model.CurrentProduct.User.FirstName) @Html.DisplayFor(model => model.CurrentProduct.User.LastName)
+        </span>
+    }
+</h2>
+</div>
+<hr />
+
+<div class="row">
+    <div class="col-md-3">
+        <h5>Description:</h5>
+        <p>@Html.DisplayFor(model => model.CurrentProduct.Description)</p>
+    </div>
+    <div class="col-md-3">
+        <h5>Price:</h5>
+        <p>$@Html.DisplayFor(model => model.CurrentProduct.Price)</p>
+    </div>
+    <div class="col-md-3">
+        <h5>Date Added:</h5>
+        <p>@Html.DisplayFor(model => model.CurrentProduct.DateCreated)</p>
+    </div>
+
+
+    @if (!SignInManager.IsSignedIn(User))
+    {
+        <div class="col-md-3">Please Log In to Start Shopping</div>
+    }
+    else if (@Model.CurrentProduct.UserId != UserManager.GetUserId(User))
+    {
+        <div class="col-md-3"><a class="btn btn-primary btn-xs" asp-controller="Cart" asp-action="AddToCart" asp-route-id="@Model.CurrentProduct.ProductId">Add to Cart</a></div>
+    }
+
+    @if (@Model.CurrentProduct.UserId == UserManager.GetUserId(User))
+    {
+        <div class="col-md-3">
+            <a asp-controller="Products" asp-action="Delete" asp-route-id="@Model.CurrentProduct.ProductId"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></a>
+
+            <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+
+            <a asp-controller="Products" asp-action="Edit" asp-route-id="@Model.CurrentProduct.ProductId"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
+        </div>
+    }
+</div>
+
+
+
+<div>
+    &lt;&lt; <a asp-controller="ProductSubTypes" asp-action="Products" asp-route-id="@Model.CurrentProduct.ProductSubTypeId">Back to List</a>
+</div>

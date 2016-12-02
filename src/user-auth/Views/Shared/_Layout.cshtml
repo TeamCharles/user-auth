@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@inject SignInManager<ApplicationUser> SignInManager
+
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -26,14 +28,25 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">user_auth</a>
+                <a asp-area="" asp-controller="ProductTypes" asp-action="Buy" class="navbar-brand">Bangazon!</a>
             </div>
             <div class="navbar-collapse collapse">
+            @if (SignInManager.IsSignedIn(User))
+            {
                 <ul class="nav navbar-nav">
-                    <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="About">About</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>
+                    <li><a asp-area="" asp-controller="Products" asp-action="Create">Sell a Product</a></li>
+                    <li>
+                        <a asp-area="" asp-controller="Cart" asp-action="Index">
+                            <span class="glyphicon glyphicon-shopping-cart" aria-hidden="true">
+                                @if (@Model.TotalCount > 0)
+                                {
+                                    <span class="badge">@Model.TotalCount)</span>
+                                }
+                            </span>
+                        </a>
+                    </li>
                 </ul>
+            }
                 @await Html.PartialAsync("_LoginPartial")
             </div>
         </div>
@@ -41,8 +54,8 @@
     <div class="container body-content">
         @RenderBody()
         <hr />
-        <footer>
-            <p>&copy; 2016 - user_auth</p>
+        <footer class="footer navbar-fixed-bottom text-center" style="color: #F0FFFF">
+            <p>&copy; @DateTime.Now.Year - BangazonWeb - Team Charles</p>
         </footer>
     </div>
 
