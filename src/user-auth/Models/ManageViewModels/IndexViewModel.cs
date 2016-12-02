@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
+using user_auth.ViewModels;
+using user_auth.Data;
 
 namespace user_auth.Models.ManageViewModels
 {
-    public class IndexViewModel
+    public class IndexViewModel : BaseViewModel
     {
         public bool HasPassword { get; set; }
 
@@ -17,5 +19,9 @@ namespace user_auth.Models.ManageViewModels
         public bool TwoFactor { get; set; }
 
         public bool BrowserRemembered { get; set; }
+
+        public IndexViewModel(ApplicationDbContext ctx, ApplicationUser user) : base(ctx, user) {}
+
+        public IndexViewModel() {}
     }
 }
