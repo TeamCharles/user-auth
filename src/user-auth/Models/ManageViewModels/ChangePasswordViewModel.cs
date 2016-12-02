@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using user_auth.ViewModels;
+using user_auth.Data;
 
 namespace user_auth.Models.ManageViewModels
 {
-    public class ChangePasswordViewModel
+    public class ChangePasswordViewModel : BaseViewModel
     {
         [Required]
         [DataType(DataType.Password)]
@@ -23,5 +25,9 @@ namespace user_auth.Models.ManageViewModels
         [Display(Name = "Confirm new password")]
         [Compare("NewPassword", ErrorMessage = "The new password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
+
+        public ChangePasswordViewModel(ApplicationDbContext ctx, ApplicationUser user) : base(ctx, user) {}
+
+        public ChangePasswordViewModel() {}
     }
 }

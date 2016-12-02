@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using user_auth.Data;
 using user_auth.Models;
 using user_auth.Models.ManageViewModels;
 using user_auth.Services;
@@ -15,6 +16,7 @@ namespace user_auth.Controllers
     [Authorize]
     public class ManageController : Controller
     {
+        private ApplicationDbContext context;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IEmailSender _emailSender;
@@ -22,12 +24,14 @@ namespace user_auth.Controllers
         private readonly ILogger _logger;
 
         public ManageController(
+        ApplicationDbContext ctx,
         UserManager<ApplicationUser> userManager,
         SignInManager<ApplicationUser> signInManager,
         IEmailSender emailSender,
         ISmsSender smsSender,
         ILoggerFactory loggerFactory)
         {
+            context = ctx;
             _userManager = userManager;
             _signInManager = signInManager;
             _emailSender = emailSender;
@@ -54,7 +58,7 @@ namespace user_auth.Controllers
             {
                 return View("Error");
             }
-            var model = new IndexViewModel
+            var model = new IndexViewModel(context, user)
             {
                 HasPassword = await _userManager.HasPasswordAsync(user),
                 PhoneNumber = await _userManager.GetPhoneNumberAsync(user),
@@ -207,9 +211,11 @@ namespace user_auth.Controllers
         //
         // GET: /Manage/ChangePassword
         [HttpGet]
-        public IActionResult ChangePassword()
+        public async Task<IActionResult> ChangePassword()
         {
-            return View();
+            var user = await GetCurrentUserAsync();
+            ChangePasswordViewModel newPasswordView = new ChangePasswordViewModel(context, user);
+            return View(newPasswordView);
         }
 
         //
@@ -218,11 +224,13 @@ namespace user_auth.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model)
         {
+            var user = await GetCurrentUserAsync();
+
             if (!ModelState.IsValid)
             {
-                return View(model);
+                ChangePasswordViewModel newPasswordView = new ChangePasswordViewModel(context, user);
+                return View(newPasswordView);
             }
-            var user = await GetCurrentUserAsync();
             if (user != null)
             {
                 var result = await _userManager.ChangePasswordAsync(user, model.OldPassword, model.NewPassword);
