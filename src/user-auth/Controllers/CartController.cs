@@ -24,6 +24,8 @@ namespace user_auth.Controllers
      *   Task<IActionResult> Confirmation(int id) - Returns a Confirmation view that lists cart information, the order# and payment method.
      *   IActionResult Error() - Returns an Error view. Currently not used.
      */
+    
+    [Authorize]
     public class CartController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;
@@ -87,7 +89,7 @@ namespace user_auth.Controllers
             string userId = user.Id;
 
             // Find the product
-            Product productQuery = await(
+            Product productQuery = await (
                 from product in context.Product
                 where product.ProductId == id
                 select product).SingleOrDefaultAsync();
@@ -98,7 +100,7 @@ namespace user_auth.Controllers
             }
 
             // Find the user's active order
-            Order openOrderQuery = await(
+            Order openOrderQuery = await (
                 from order in context.Order
                 where order.UserId == userId && order.DateCompleted == null
                 select order).SingleOrDefaultAsync();
@@ -109,7 +111,8 @@ namespace user_auth.Controllers
             if (openOrderQuery == null)
             {
                 // Creating a new Order
-                openOrder = new Order {
+                openOrder = new Order
+                {
                     UserId = userId
                 };
                 context.Order.Add(openOrder);
@@ -121,13 +124,13 @@ namespace user_auth.Controllers
             }
 
             // Create a new LineItem with the ProductId and OrderId
-            LineItem lineItem = new LineItem(){ OrderId = openOrder.OrderId, ProductId = id };
+            LineItem lineItem = new LineItem() { OrderId = openOrder.OrderId, ProductId = id };
 
             context.LineItem.Add(lineItem);
             await context.SaveChangesAsync();
 
-            return RedirectToAction( "Detail", new RouteValueDictionary(
-                     new { controller = "Products", action = "Detail", Id = id } ) );
+            return RedirectToAction("Detail", new RouteValueDictionary(
+                     new { controller = "Products", action = "Detail", Id = id }));
         }
 
         /**
@@ -141,27 +144,27 @@ namespace user_auth.Controllers
         {
             var user = await GetCurrentUserAsync();
             // Gets the Open Order based on the ActiveUser
-            Order OpenOrder = await(
+            Order OpenOrder = await (
                 from order in context.Order
                 where order.UserId == user.Id && order.DateCompleted == null
                 select order).SingleOrDefaultAsync();
 
-                // Retrieve the LineItem to be deleted
+            // Retrieve the LineItem to be deleted
             LineItem deletedItem = await context.LineItem.FirstAsync(p => p.ProductId == id && p.OrderId == OpenOrder.OrderId);
 
 
             if (deletedItem == null)
             {
                 return RedirectToAction("Index", new RouteValueDictionary(
-                    new { controller = "Cart", action = "Index"} ) );
+                    new { controller = "Cart", action = "Index" }));
             }
 
             try
             {
                 context.Remove(deletedItem);
                 await context.SaveChangesAsync();
-                return RedirectToAction( "Index", new RouteValueDictionary(
-                     new { controller = "Cart", action = "Index", Id = id } ) );
+                return RedirectToAction("Index", new RouteValueDictionary(
+                     new { controller = "Cart", action = "Index", Id = id }));
             }
             catch (DbUpdateException)
             {
@@ -185,7 +188,7 @@ namespace user_auth.Controllers
             string userId = user.Id;
 
             //get the open order
-            Order openOrder = await(
+            Order openOrder = await (
                 from order in context.Order
                 where order.UserId == userId && order.DateCompleted == null
                 select order).SingleOrDefaultAsync();
@@ -199,9 +202,10 @@ namespace user_auth.Controllers
             if (orderView.selectedPaymentId > 0)
             {
                 openOrder.PaymentTypeId = orderView.selectedPaymentId;
-            } else
+            }
+            else
             {
-                return RedirectToAction("Final","Order");
+                return RedirectToAction("Final", "Order");
             }
 
             try
@@ -211,7 +215,7 @@ namespace user_auth.Controllers
                 context.Order.Update(openOrder);
                 await context.SaveChangesAsync();
                 return RedirectToAction("Confirmation", new RouteValueDictionary(
-                     new { controller = "Cart", action = "Confirmation", Id = openOrder.OrderId } ));
+                     new { controller = "Cart", action = "Confirmation", Id = openOrder.OrderId }));
 
             }
             catch (DbUpdateException)
@@ -232,7 +236,7 @@ namespace user_auth.Controllers
         public async Task<IActionResult> Confirmation(int id)
         {
             //get the complete order
-            Order CompleteOrder = await(
+            Order CompleteOrder = await (
                 from order in context.Order
                 where order.OrderId == id
                 select order).SingleOrDefaultAsync();
@@ -243,7 +247,7 @@ namespace user_auth.Controllers
             }
 
             //get the line items for the order
-            var LineItems = await(
+            var LineItems = await (
                 from product in context.Product
                 from lineItem in context.LineItem
                     .Where(lineItem => lineItem.OrderId == id && lineItem.ProductId == product.ProductId && lineItem.Product.IsActive == true)

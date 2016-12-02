@@ -33,6 +33,8 @@ namespace user_auth.Controllers
      *   Task<IActionResult> Delete(int id) - Sets the IsActive property on a Product to false and commits to the database. Redirects a user to the ProductTypes List page.
      *          - int id: ProductId of the Product being updated.
      */
+
+    [Authorize]
     public class ProductsController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;
@@ -121,7 +123,8 @@ namespace user_auth.Controllers
                     .OrderBy(l => l.Label)
                     .AsEnumerable()
                     .Where(t => t.ProductTypeId == product.ProductTypeId)
-                    .Select(li => new SelectListItem {
+                    .Select(li => new SelectListItem
+                    {
                         Text = li.Label,
                         Value = li.ProductSubTypeId.ToString()
                     });
@@ -173,16 +176,17 @@ namespace user_auth.Controllers
 
             var user = await GetCurrentUserAsync();
             var model = new ProductEdit(context, user);
-                model.CurrentProduct = product.CurrentProduct;
+            model.CurrentProduct = product.CurrentProduct;
 
-                model.ProductSubTypes = context.ProductSubType
-                    .OrderBy(l => l.Label)
-                    .AsEnumerable()
-                    .Where(t => t.ProductTypeId == model.CurrentProduct.ProductTypeId)
-                    .Select(li => new SelectListItem {
-                        Text = li.Label,
-                        Value = li.ProductSubTypeId.ToString()
-                    });
+            model.ProductSubTypes = context.ProductSubType
+                .OrderBy(l => l.Label)
+                .AsEnumerable()
+                .Where(t => t.ProductTypeId == model.CurrentProduct.ProductTypeId)
+                .Select(li => new SelectListItem
+                {
+                    Text = li.Label,
+                    Value = li.ProductSubTypeId.ToString()
+                });
 
             return View(model);
         }
@@ -234,7 +238,8 @@ namespace user_auth.Controllers
                     .OrderBy(l => l.Label)
                     .AsEnumerable()
                     .Where(t => t.ProductTypeId == product.NewProduct.ProductTypeId)
-                    .Select(li => new SelectListItem {
+                    .Select(li => new SelectListItem
+                    {
                         Text = li.Label,
                         Value = li.ProductSubTypeId.ToString()
                     });
