@@ -46,6 +46,7 @@
         </div>
 
         @Html.Hidden("CurrentProduct.ProductId", Model.CurrentProduct.ProductId)
+        @Html.Hidden("CurrentProduct.UserId", Model.getLoggedInUserId())
 
         <div class="form-group">
             <label asp-for="CurrentProduct.ProductSubTypeId" class="col-md-2 control-label">Sub Type</label>

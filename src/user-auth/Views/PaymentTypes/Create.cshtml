@@ -11,7 +11,7 @@
         <h4>Product</h4>
         <hr />
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-
+        @Html.Hidden("NewPaymentType.UserId", Model.getLoggedInUserId())
         <div class="form-group">
             <label asp-for="NewPaymentType.Description" class="col-md-2 control-label">Payment Type Name</label>
             <div class="col-md-10">
