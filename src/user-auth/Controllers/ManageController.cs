@@ -211,9 +211,11 @@ namespace user_auth.Controllers
         //
         // GET: /Manage/ChangePassword
         [HttpGet]
-        public IActionResult ChangePassword()
+        public async Task<IActionResult> ChangePassword()
         {
-            return View();
+            var user = await GetCurrentUserAsync();
+            ChangePasswordViewModel newPasswordView = new ChangePasswordViewModel(context, user);
+            return View(newPasswordView);
         }
 
         //
@@ -222,11 +224,13 @@ namespace user_auth.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model)
         {
+            var user = await GetCurrentUserAsync();
+
             if (!ModelState.IsValid)
             {
-                return View(model);
+                ChangePasswordViewModel newPasswordView = new ChangePasswordViewModel(context, user);
+                return View(newPasswordView);
             }
-            var user = await GetCurrentUserAsync();
             if (user != null)
             {
                 var result = await _userManager.ChangePasswordAsync(user, model.OldPassword, model.NewPassword);
