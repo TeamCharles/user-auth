@@ -215,10 +215,11 @@ namespace user_auth.Controllers
         public async Task<IActionResult> Create(ProductCreate product)
         {
             var user = await GetCurrentUserAsync();
-            if (ModelState.IsValid && product.NewProduct.ProductTypeId > 0 && product.NewProduct.ProductSubTypeId > 0)
+
+            if (product.NewProduct.ProductTypeId > 0 && product.NewProduct.ProductSubTypeId > 0)
             {
-                product.NewProduct.UserId = user.Id;
                 product.NewProduct.IsActive = true;
+                product.NewProduct.UserId = user.Id;
                 context.Add(product.NewProduct);
                 await context.SaveChangesAsync();
                 return RedirectToAction("Detail", new RouteValueDictionary(
