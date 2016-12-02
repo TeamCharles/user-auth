@@ -1,5 +1,4 @@
 ﻿// Write your Javascript code.
-// Write your Javascript code.
 $(document).ready(function () {
 
     // update subtype for product on server
