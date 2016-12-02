@@ -1,5 +1,6 @@
 @model user_auth.ViewModels.ProductCreate
 
+
 @{
     ViewData["Title"] = "Sell a Product";
 }
@@ -9,6 +10,7 @@
 <form asp-action="Create">
     <div class="form-horizontal">
         <hr />
+        @Html.Hidden("NewProduct.UserId", Model.getLoggedInUserId())
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <div class="form-group">
             <label asp-for="NewProduct.Name" class="col-md-2 control-label"></label>

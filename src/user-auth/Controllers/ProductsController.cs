@@ -216,7 +216,7 @@ namespace user_auth.Controllers
         {
             var user = await GetCurrentUserAsync();
 
-            if (product.NewProduct.ProductTypeId > 0 && product.NewProduct.ProductSubTypeId > 0)
+            if (ModelState.IsValid && product.NewProduct.ProductTypeId > 0 && product.NewProduct.ProductSubTypeId > 0)
             {
                 product.NewProduct.IsActive = true;
                 product.NewProduct.UserId = user.Id;

@@ -37,7 +37,9 @@ namespace user_auth.ViewModels
     public BaseViewModel(ApplicationDbContext ctx, ApplicationUser user)
     {
         context = ctx;
-        
+
+        _user = user;
+
         if (user != null)
             {
                 // For help with this LINQ query, refer to
@@ -57,5 +59,11 @@ namespace user_auth.ViewModels
     }
 
     public BaseViewModel() { }
+
+    private ApplicationUser _user;
+
+    public string getLoggedInUserId() {
+        return _user.Id;
+    }
   }
 }
