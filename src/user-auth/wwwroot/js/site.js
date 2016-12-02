@@ -1,5 +1,4 @@
 ﻿// Write your Javascript code.
-// Write your Javascript code.
 $(document).ready(function () {
 
     // update user selected on server

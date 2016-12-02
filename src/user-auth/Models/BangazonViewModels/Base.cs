@@ -37,21 +37,23 @@ namespace user_auth.ViewModels
     public BaseViewModel(ApplicationDbContext ctx, ApplicationUser user)
     {
         context = ctx;
+        
+        if (user != null)
+            {
+                // For help with this LINQ query, refer to
+                // https://stackoverflow.com/questions/373541/how-to-do-joins-in-linq-on-multiple-fields-in-single-join
+                this.CartProducts = (
+                    from product in context.Product
+                    from lineItem in context.LineItem
+                        .Where(lineItem => lineItem.OrderId == context.Order.SingleOrDefault(o => o.DateCompleted == null && o.UserId == user.Id).OrderId && lineItem.ProductId == product.ProductId)
+                    select product).ToList();
 
-        // For help with this LINQ query, refer to
-        // https://stackoverflow.com/questions/373541/how-to-do-joins-in-linq-on-multiple-fields-in-single-join
-        this.CartProducts = (
-            from product in context.Product
-            from lineItem in context.LineItem
-                .Where(lineItem => lineItem.OrderId == context.Order.SingleOrDefault(o => o.DateCompleted == null && o.UserId == user.Id).OrderId && lineItem.ProductId == product.ProductId)
-            select product).ToList();
-
-        foreach (Product product in this.CartProducts)
-        {
-            if (product.IsActive)
-                this.TotalCount += 1;
-        }
-
+                foreach (Product product in this.CartProducts)
+                {
+                    if (product.IsActive)
+                        this.TotalCount += 1;
+                }
+            }
     }
 
     public BaseViewModel() { }
