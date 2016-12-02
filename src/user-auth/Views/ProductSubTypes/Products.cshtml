@@ -1,6 +1,8 @@
 @model user_auth.ViewModels.ProductSubTypeList
 @using user_auth.Models;
 
+@inject UserManager<ApplicationUser> UserManager; 
+
 <h2>@Html.DisplayFor(model => model.ProductSubType.Label) Products</h2>
 
 <table class="table table-striped">
@@ -23,7 +25,7 @@
                 <td><a class="btn btn-primary btn-xs" asp-controller="Products" asp-action="Detail" asp-route-id="@item.ProductId">Details</a></td>
 
                 <td>
-                    @if (item.UserId == @Model.ChosenUser.UserId)
+                    @if (item.UserId == UserManager.GetUserId(User))
                     {
                         <a asp-controller="Products" asp-action="Delete" asp-route-id="@item.ProductId"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></a>
                         <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
