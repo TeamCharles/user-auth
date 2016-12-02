@@ -34,7 +34,6 @@ namespace user_auth.Controllers
      *          - int id: ProductId of the Product being updated.
      */
 
-    [Authorize]
     public class ProductsController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;
@@ -107,6 +106,7 @@ namespace user_auth.Controllers
          *      Redirects user to product edit view if product located in database otherwise returns not found
          */
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> Edit([FromRoute]int? id)
         {
             // If no id was in the route, return 404
@@ -151,6 +151,7 @@ namespace user_auth.Controllers
          */
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> Edit(ProductEdit product)
         {
             Product originalProduct = await context.Product.SingleAsync(p => p.ProductId == product.CurrentProduct.ProductId);
@@ -197,6 +198,7 @@ namespace user_auth.Controllers
          */
 
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> Create()
         {
             var user = await GetCurrentUserAsync();
@@ -216,6 +218,7 @@ namespace user_auth.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> Create(ProductCreate product)
         {
             var user = await GetCurrentUserAsync();
@@ -253,6 +256,7 @@ namespace user_auth.Controllers
          * Return:
          *      Redirects user to list of products
          */
+        [Authorize]
         public async Task<IActionResult> Delete([FromRoute]int id)
         {
             Product originalProduct = await context.Product.SingleAsync(p => p.ProductId == id);
