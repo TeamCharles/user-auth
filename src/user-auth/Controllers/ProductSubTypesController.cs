@@ -25,6 +25,8 @@ namespace user_auth.Controllers
      *   void CalculateTypeQuantities(ProductSubType productSubType) - Queries the Product table to count the number of Products in a given ProductSubType. Updates the ProductSubType.Quantity property.
      *          - ProductSubType productSubType: ProductSubType to be updated with Quantity.
      **/
+
+
     public class ProductSubTypesController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;

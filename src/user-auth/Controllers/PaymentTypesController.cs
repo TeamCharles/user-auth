@@ -1,4 +1,3 @@
-using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using user_auth.Data;
@@ -19,6 +18,8 @@ namespace user_auth.Controllers
      *   Task<IActionResult> Create(PaymentTypeView paymentType) - Posts new Payment Type to the database and redirects user to the Cart view.
      *          - PaymentTypeView paymentType: ViewModel returned on submission of the Create Payment Type form.
      */
+
+    [Authorize]
     public class PaymentTypesController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;
@@ -67,9 +68,9 @@ namespace user_auth.Controllers
             {
                 context.Add(paymentType.NewPaymentType);
                 await context.SaveChangesAsync();
-                return RedirectToAction( "Final", new RouteValueDictionary(
+                return RedirectToAction("Final", new RouteValueDictionary(
 
-                     new { controller = "Order", action = "Final", Id = paymentType.NewPaymentType.PaymentTypeId } ) );
+                     new { controller = "Order", action = "Final", Id = paymentType.NewPaymentType.PaymentTypeId }));
             }
 
             var model = new PaymentTypeView(context, user);
